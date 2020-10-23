@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using NetCore.Dal.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using YDal.Common;
 
-namespace Kulv.YCF.Component
+namespace YDal.Component
 {
     /// <summary>
     /// 扩展System.Data.Entity.Database

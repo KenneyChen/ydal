@@ -1,12 +1,10 @@
-﻿using EntityFramework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
-using System.Text;
 
-namespace NetCore.Dal.UnitOfWork
+namespace YDal.UnitOfWork
 {
     /// <summary>
     ///     数据单元操作接口

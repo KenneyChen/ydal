@@ -13,6 +13,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using YDal.Models;
 
 namespace {ModelsNamespace}
 {
@@ -21,7 +22,7 @@ namespace {ModelsNamespace}
     /// {GeneratorTime}
     /// {Comment}
     /// </summary>
-    public partial class {ModelName}
+    public partial class {ModelName}:BaseEntity
     {
         {ModelProperties}
     }

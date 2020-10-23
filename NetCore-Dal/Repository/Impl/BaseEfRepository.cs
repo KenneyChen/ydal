@@ -1,23 +1,21 @@
-﻿using EntityFramework;
-using Kulv.YCF.Component;
-using Microsoft.EntityFrameworkCore;
-using NetCore.Dal.Common;
-using NetCore.Dal.UnitOfWork;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
+using YDal.Common;
+using YDal.Component;
+using YDal.UnitOfWork;
+using YDal.UnitOfWork.Impl;
 
-namespace Repository.Impl
+namespace YDal.Repository.Impl
 {
 
     /// <summary>
     /// EntityFramework仓储操作基类
     /// </summary>
     /// <typeparam name="TEntity">动态实体类型</typeparam>
-    public abstract class BaseEfRepository<TEntity> : IRepositoryy<TEntity> where TEntity : class
+    public abstract class BaseEfRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
       
 

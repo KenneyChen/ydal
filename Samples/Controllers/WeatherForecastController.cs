@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Repository;
-using Repository.Impl;
+using Samples.Models;
+using Samples.Repository;
 
 namespace Samples.Controllers
 {
@@ -13,7 +13,7 @@ namespace Samples.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private IDemoRepostiory DemoRepostiory1;
+        private IdemoRepository DemoRepostiory1;
 
 
         private static readonly string[] Summaries = new[]
@@ -23,7 +23,7 @@ namespace Samples.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IDemoRepostiory DemoRepostiory)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IdemoRepository DemoRepostiory)
         {
             _logger = logger;
             this.DemoRepostiory1 = DemoRepostiory;
@@ -32,7 +32,7 @@ namespace Samples.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            DemoRepostiory1.Insert(new NetCore_Dal.Models.Demo { UserName = "马虎贴吧222" });
+            DemoRepostiory1.Insert(new demo { UserName = "明哥富婆" });
 
             Console.WriteLine($"{DemoRepostiory1.GetHashCode()}");
             var rng = new Random();

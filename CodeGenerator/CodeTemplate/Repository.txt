@@ -10,47 +10,26 @@
 *│　类    名： {ModelName}Repository                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-using Czar.Cms.Core.DbHelper;
-using Czar.Cms.Core.Options;
-using Czar.Cms.Core.Repository;
-using Czar.Cms.IRepository;
-using Czar.Cms.Models;
-using Dapper;
-using Microsoft.Extensions.Options;
+using {ModelsNamespace};
+using {IRepositoriesNamespace};
 using System;
 using System.Threading.Tasks;
+using YDal.Repository;
+using YDal.Repository.Impl;
+using YDal.UnitOfWork;
 
-namespace {RepositoryNamespace}
+namespace {RepositoriesNamespace}
 {
-    public class {ModelName}Repository:BaseRepository<{ModelName},{KeyTypeName}>, I{ModelName}Repository
+    public class {ModelTypeName}Repository: BaseEfRepository<{ModelTypeName}>,I{ModelTypeName}Repository
     {
-        public {ModelName}Repository(IOptionsSnapshot<DbOption> options)
-        {
-            _dbOption =options.Get("CzarCms");
-            if (_dbOption == null)
-            {
-                throw new ArgumentNullException(nameof(DbOption));
-            }
-            _dbConnection = ConnectionFactory.CreateConnection(_dbOption.DbType, _dbOption.ConnectionString);
-        }
+        /// <summary>
+        ///  获取 仓储上下文的实例
+        /// </summary>
+        private IUnitOfWork unitOfWork;
 
-        public int DeleteLogical(int[] ids)
+        public {ModelTypeName}Repository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            string sql = "update {ModelName} set IsDelete=1 where Id in @Ids";
-            return _dbConnection.Execute(sql, new
-            {
-                Ids = ids
-            });
+            this.unitOfWork = unitOfWork;
         }
-
-        public async Task<int> DeleteLogicalAsync(int[] ids)
-        {
-            string sql = "update {ModelName} set IsDelete=1 where Id in @Ids";
-            return await _dbConnection.ExecuteAsync(sql, new
-            {
-                Ids = ids
-            });
-        }
-
     }
 }

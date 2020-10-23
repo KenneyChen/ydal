@@ -4,11 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Repository.Impl
+namespace YDal.Repository
 {
     public interface IRepository { }
 
-    public interface IRepositoryy<TEntity>: IRepository
+    public interface IRepository<TEntity>: IRepository
     {
         #region 属性
 

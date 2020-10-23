@@ -13,6 +13,7 @@ namespace Test
             var codeGenerator = serviceProvider.GetService<CodeGenerator>();
             codeGenerator.GenerateAllCodesFromDatabase(true);
             Console.WriteLine("生成成功!");
+            Console.ReadLine();
         }
     }
 }

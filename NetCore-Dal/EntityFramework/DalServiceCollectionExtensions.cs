@@ -1,17 +1,15 @@
-﻿using EntityFramework;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NetCore.Dal.UnitOfWork.Impl;
-using Repository.Impl;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Z.BulkOperations;
+using YDal.Repository;
+using YDal.UnitOfWork;
+using YDal.UnitOfWork.Impl;
 
-namespace NetCore.Dal.EntityFramework
+namespace YDal.EntityFramework
 {
     public static class DalServiceCollectionExtensions
     {

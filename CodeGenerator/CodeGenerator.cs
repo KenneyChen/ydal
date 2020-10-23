@@ -82,7 +82,7 @@ namespace NetCore.Dal
         /// <param name="ifExistCovered"></param>
         public void GenerateIRepository(string modelTypeName, bool ifExistCovered = false)
         {
-            var iRepositoryPath = Option.OutputPath + Delimiter + "IRepositories";
+            var iRepositoryPath = Option.OutputPath + Delimiter + "Repositories";
             if (!Directory.Exists(iRepositoryPath))
             {
                 Directory.CreateDirectory(iRepositoryPath);
@@ -106,7 +106,7 @@ namespace NetCore.Dal
         /// <param name="ifExistCovered"></param>
         public void GenerateRepository(string modelTypeName, bool ifExistCovered = false)
         {
-            var repositoryPath = Option.OutputPath + Delimiter + "Repositories";
+            var repositoryPath = Option.OutputPath + Delimiter + "Repositories/Impl";
             if (!Directory.Exists(repositoryPath))
             {
                 Directory.CreateDirectory(repositoryPath);
@@ -180,12 +180,22 @@ namespace NetCore.Dal
         public void GenerateAllCodesFromDatabase(bool ifExistCovered = false)
         {
             var dbType = ConnectionFactory.GetDataBaseType(Option.DbType);
+
             using (var dbConnection = dbType.CreateConnection(Option.ConnectionString))
             {
                 //获取所有表和所有列表
                 var tables = dbConnection.GetCurrentDatabaseTableList(dbType);
                 foreach (var table in tables)
                 {
+                    if (!string.IsNullOrWhiteSpace(Option.Tables))
+                    {
+                        var mytables = Option.Tables.Split(',').ToList();
+                        if (!mytables.Any(f => f.Equals(table.TableName, StringComparison.InvariantCultureIgnoreCase))){
+                            //不是用户指定表 过滤
+                            continue;
+                        }
+                    }
+
                     //生成实体
                     GenerateEntity(table);
 
@@ -196,10 +206,10 @@ namespace NetCore.Dal
                     GenerateRepository(table.TableName, ifExistCovered);
 
                     //生成service
-                    GenerateIService(table.TableName, ifExistCovered);
+                    //GenerateIService(table.TableName, ifExistCovered);
 
                     //生成service
-                    GenerateService(table.TableName, ifExistCovered);
+                    //GenerateService(table.TableName, ifExistCovered);
                 }
             }
 
@@ -256,7 +266,7 @@ namespace NetCore.Dal
                 {
                     sb.AppendLine("\t\t[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
                 }
-                sb.AppendLine($"\t\tpublic override {column.CSharpType} Id " + "{get;set;}");
+                sb.AppendLine($"\t\tpublic {column.CSharpType} Id " + "{get;set;}");
             }
             else
             {

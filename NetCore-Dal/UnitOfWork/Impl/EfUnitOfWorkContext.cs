@@ -1,10 +1,7 @@
-﻿using EntityFramework;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
+using YDal.EntityFramework;
 
-namespace NetCore.Dal.UnitOfWork.Impl
+namespace YDal.UnitOfWork.Impl
 {
     public class EfUnitOfWorkContext : BaseUnitOfWorkContext
     {

@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NetCore.Dal.Models;
-using NetCore.Dal.Models;
+using YDal.Models;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace EntityFramework
+namespace YDal.EntityFramework
 {
     public class DalDbContext : DbContext
     {

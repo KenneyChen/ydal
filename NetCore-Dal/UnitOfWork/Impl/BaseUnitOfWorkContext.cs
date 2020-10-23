@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace NetCore.Dal.UnitOfWork
+namespace YDal.UnitOfWork.Impl
 {
     /// <summary>
     ///     单元操作实现基类

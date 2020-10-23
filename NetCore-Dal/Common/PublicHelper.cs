@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NetCore.Dal.Common
+namespace YDal.Common
 {
     /// <summary>
     ///     公共辅助操作类

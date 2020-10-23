@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NetCore.Dal.Models
+namespace YDal.Models
 {
     /// <summary>
     /// db基类

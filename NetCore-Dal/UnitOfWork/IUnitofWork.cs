@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
-namespace EntityFramework
+namespace YDal.UnitOfWork
 {
     /// <summary>
     ///     业务单元操作接口

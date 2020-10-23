@@ -47,5 +47,10 @@ namespace NetCore.Dal.Models
         /// 服务命名空间
         /// </summary>
         public string ServicesNamespace { get; set; }
+
+        /// <summary>
+        /// 生成表名集合，为空全部
+        /// </summary>
+        public string Tables { get; set; }
     }
 }
