@@ -1,0 +1,9 @@
+F:\_git\NetCore-DAL\src\NetCore-Dal\obj\Debug\netstandard2.0\NetCore.Dal.AssemblyInfoInputs.cache
+F:\_git\NetCore-DAL\src\NetCore-Dal\obj\Debug\netstandard2.0\NetCore.Dal.AssemblyInfo.cs
+F:\_git\NetCore-DAL\src\NetCore-Dal\bin\Debug\netstandard2.0\NetCore.Dal.deps.json
+F:\_git\NetCore-DAL\src\NetCore-Dal\bin\Debug\netstandard2.0\NetCore.Dal.dll
+F:\_git\NetCore-DAL\src\NetCore-Dal\bin\Debug\netstandard2.0\NetCore.Dal.pdb
+F:\_git\NetCore-DAL\src\NetCore-Dal\obj\Debug\netstandard2.0\NetCore.Dal.dll
+F:\_git\NetCore-DAL\src\NetCore-Dal\obj\Debug\netstandard2.0\NetCore.Dal.pdb
+F:\_git\NetCore-DAL\src\NetCore-Dal\obj\Debug\netstandard2.0\NetCore.Dal.csprojAssemblyReference.cache
+F:\_git\NetCore-DAL\src\NetCore-Dal\obj\Debug\netstandard2.0\NetCore.Dal.csproj.CoreCompileInputs.cache
