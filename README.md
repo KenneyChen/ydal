@@ -1,3 +1,7 @@
+---
+typora-copy-images-to: static
+---
+
 # y-dal
 a niubi netcore orm   framework
 
@@ -22,7 +26,7 @@ Install-Package Y.Dal.CodeGenerator
 
 也可以使用nuget管理客户端进行安装
 
-
+![https://github.com/KenneyChen/y-dal/blob/main/static/nuget.y.dal.png]()
 
 
 
