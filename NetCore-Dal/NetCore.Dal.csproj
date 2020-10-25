@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>NetCore.Dal</RootNamespace>
-    <Version>1.0.1</Version>
+    <Version>1.0.3</Version>
+    <PackageId>Y.Dal</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
