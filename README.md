@@ -17,7 +17,12 @@ a niubi netcore orm   framework
 
 ```
 Install-Package y.dal
+Install-Package Y.Dal.CodeGenerator 
 ```
+
+也可以使用nuget管理客户端进行安装
+
+
 
 
 
@@ -28,34 +33,26 @@ Install-Package y.dal
  {
             services.AddControllers();
 
-            services.AddDal();  //注入
+             services
+               .AddDal()//类库核心功能
+               .AddDalCodeGenerator();//代码生成器专用，生成框架代码之后请注释这段代码AddDalCodeGenerator; 
  }           
 ```
 
 
 
-> 生成框架代码
-
-打开项目 CodeGenerator，配置相关参数运行
-
-代码
-
-①可以通过nuget下载  （推荐）
-
-```powershell
-Install-Package Y.Dal.CodeGenerator -Version 1.0.0
-```
-
-
-
-② git clone
-
-https://github.com/KenneyChen/y-dal.git
+> 生成框架代码配置
 
 
 
 ```json
 {
+    //连接数据库专用
+    "ConnectionStrings": {
+        "DefaultConnection": "server=localhost;uid=root;pwd=123456;port=3306;database=test;sslmode=Preferred;"
+    }
+    
+    //代码生成器插件使用 
     "DbOption": {
         "ConnectionString": "server=localhost;uid=root;pwd=123456;port=3306;database=test;sslmode=Preferred;",
         "DbType": "MySQL", //SqlServer  mysql
@@ -71,12 +68,6 @@ https://github.com/KenneyChen/y-dal.git
 }
 
 ```
-
-
-
-> 拷贝生成代码到你实际项目
-
-代码输出目录："OutputPath": "F:\\app\\y-dal\\cs"   可自行调整
 
 
 

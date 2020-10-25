@@ -23,9 +23,14 @@ namespace NetCore.Dal.Models
         public string GeneratorTime { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         /// <summary>
-        /// 输出路径
+        /// Model输出路径
         /// </summary>
-        public string OutputPath { get; set; }
+        public string ModelOutputPath { get; set; }
+
+        /// <summary>
+        /// Model输出路径
+        /// </summary>
+        public string RepositoryOutputPath { get; set; }
 
         /// <summary>
         /// 实体命名空间

@@ -18,7 +18,7 @@ namespace YDal.EntityFramework
             Console.WriteLine(info);
         }
 
-        public static void AddDal(this IServiceCollection services)
+        public static IServiceCollection AddDal(this IServiceCollection services)
         {
          
             //设置工作目录，Linux下可能出现找不到目录
@@ -77,6 +77,8 @@ namespace YDal.EntityFramework
                     }
                 }
             }
+
+            return services;
 
         }
 

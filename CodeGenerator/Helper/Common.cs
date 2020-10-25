@@ -22,11 +22,10 @@ namespace NetCore.Dal.Helper
         }
 
         public static IConfiguration GetConfiguration()
-        {
-            var builder = new ConfigurationBuilder()
+        { var builder = new ConfigurationBuilder()
                .SetBasePath(AppContext.BaseDirectory)
                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-               .AddEnvironmentVariables();
+               ;
             return builder.Build();
         }
     }
