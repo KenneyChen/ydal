@@ -3,13 +3,13 @@ typora-copy-images-to: static
 ---
 
 # y-dal
-a niubi netcore orm   framework
-
-
-
 
 
 > 项目框架介绍
+
+可能是东半球最好netcore ORM框架，目前暂时支持mysql、mssql，其核心设计目标是开发迅速、学习简单、轻量级、易扩展。现已开放源代码，开箱即用。
+
+## 
 
 
 
@@ -130,4 +130,53 @@ namespace Samples.Controllers
 }
 
 ```
+
+
+
+## API使用
+
+支持以下2种写法，根据自身需要选择其中一种即可，以下所有代码查看源码UnitTest项目
+
+#### lambda
+
+```c#
+xxxRepository.Where(f=>f.Id==123);
+```
+
+**Linq**:
+
+```c#
+from a in xxxRepository
+```
+
+
+
+### 1、where （条件查询)
+
+```c#
+①简单使用
+fitler
+②多个条件
+③多个表关联    
+```
+
+
+
+2、select（映射）
+
+
+
+3、update （更新）
+
+
+
+4、delete （删除）
+
+
+
+5、insert （插入）
+
+
+
+6、page分页 （分页）
 

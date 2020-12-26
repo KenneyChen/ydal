@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NetCore.Dal.Services;
 using System;
 using System.IO;
 using System.Linq;
@@ -13,14 +15,21 @@ namespace YDal.EntityFramework
 {
     public static class DalServiceCollectionExtensions
     {
-        static void Debug(string info) {
+        public static readonly ILoggerFactory efLogger = LoggerFactory.Create(builder =>
+        {
+            builder.AddFilter((category, level) => 
+            category == DbLoggerCategory.Database.Command.Name && level == LogLevel.Information).AddConsole();
+        });
+
+        static void Debug(string info)
+        {
             System.Diagnostics.Debug.WriteLine(info);
             Console.WriteLine(info);
         }
 
         public static IServiceCollection AddDal(this IServiceCollection services)
         {
-         
+
             //设置工作目录，Linux下可能出现找不到目录
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             var builder = new ConfigurationBuilder();
@@ -31,9 +40,11 @@ namespace YDal.EntityFramework
 
             var connection = config.GetConnectionString("DefaultConnection");
             var dbType = config.GetConnectionString("DbType");
-            if (string.IsNullOrEmpty("connection"))
+            if (string.IsNullOrEmpty(connection))
             {
-                throw new Exception("请在appsettings.json配置DefaultConnection节点");
+                throw new Exception("请在appsettings.json配置数据库连接字符串 " +
+                    "'ConnectionStrings':{'DefaultConnection':'xxxxx'} " +
+                    "节点");
             }
 
             //注入dbcontext
@@ -46,14 +57,16 @@ namespace YDal.EntityFramework
                         options.UseSqlServer(connection);
                         break;
                     case "mysql":
-                        options.UseMySql(connection);
+                        options.UseMySQL(connection);
                         break;
                     default:
                         //默认是mysql
-                        options.UseMySql(connection);
+                        options.UseMySQL(connection);
                         break;
                 }
-                
+                //增加sql日记记录
+                options.UseLoggerFactory(efLogger);
+
             });
 
             //注入工作单元
@@ -63,17 +76,44 @@ namespace YDal.EntityFramework
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var item in assemblies)
             {
-                var r = item.GetTypes().Where(f => f.IsGenericType == true).ToList();
-
-                var classTypes = item.GetTypes().Where(f =>f.IsClass==true&& typeof(IRepository).IsAssignableFrom(f)).ToList();
-                foreach (var cls in classTypes)
+                //IRepository
                 {
-                    //后续扩展 通过cls特性 建立不同生命周期
-                    var interfaceType = cls.GetInterfaces().FirstOrDefault(f =>f.IsGenericType==false && !f.Equals(typeof(IRepository)));
-                    if (interfaceType!=null)
+                    var classTypes = item.GetTypes().Where(f => f.IsClass == true && typeof(IRepository).IsAssignableFrom(f)).ToList();
+                    foreach (var cls in classTypes)
                     {
-                        Debug($"接口{interfaceType},实现类：{cls},Scoped注入成功");
-                        services.AddScoped(interfaceType,cls);
+                        //后续扩展 通过cls特性 建立不同生命周期
+                        var interfaceType = cls.GetInterfaces().FirstOrDefault(f => f.IsGenericType == false && !f.Equals(typeof(IRepository)));
+                        if (interfaceType != null)
+                        {
+                            Debug($"接口{interfaceType},实现类：{cls},Scoped注入成功");
+                            services.AddScoped(interfaceType, cls);
+                        }
+                    }
+                }
+            }
+            foreach (var item in assemblies)
+            {
+                //IService
+                {
+                    var classTypes = item.GetTypes()
+                        .Where(f => f.IsClass == true && f.FullName.ToLower().EndsWith("service"))
+                        .ToList();
+                    foreach (var cls in classTypes)
+                    {
+                        //后续扩展 通过cls特性 建立不同生命周期
+                        //&& f.FullName.EndsWith("Service")
+                        //NetCore.Dal.Services.IService`1
+                        var interfaceType = cls
+                            .GetInterfaces()
+                            .FirstOrDefault(f => f.IsGenericType == false 
+                            && f.GetInterfaces().Length==1 
+                            && f.GetInterfaces().All(a=>a.Name==typeof(IService<>).Name && a.Namespace== "NetCore.Dal.Services") 
+                            && f.FullName.ToLower().EndsWith("service"));
+                        if (interfaceType != null)
+                        {
+                            Debug($"接口{interfaceType},实现类：{cls},Scoped注入成功");
+                            services.AddScoped(interfaceType, cls);
+                        }
                     }
                 }
             }

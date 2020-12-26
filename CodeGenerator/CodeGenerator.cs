@@ -12,6 +12,10 @@ using System.Text;
 
 namespace NetCore.Dal
 {
+    /*
+     * 此代码来源博客园大佬，抄袭90%
+       https://www.cnblogs.com/luckyting/articles/11196555.html
+     */
     /// <summary>
     /// 代码生成器。
     /// <remarks>
@@ -47,6 +51,10 @@ namespace NetCore.Dal
             if (string.IsNullOrWhiteSpace(Option.RepositoryOutputPath))
             {
                 Option.RepositoryOutputPath = arr[0];
+            }
+            if (string.IsNullOrWhiteSpace(Option.ServiceOutputPath))
+            {
+                Option.ServiceOutputPath = arr[0];
             }
         }
 
@@ -126,56 +134,56 @@ namespace NetCore.Dal
             WriteAndSave(fullPath, content);
         }
 
-        ///// <summary>
-        ///// 生成IRepository层代码文件
-        ///// </summary>
-        ///// <param name="modelTypeName"></param>
-        ///// <param name="keyTypeName"></param>
-        ///// <param name="ifExistCovered"></param>
-        //public void GenerateIService(string modelTypeName, bool ifExistCovered = false)
-        //{
-        //    var iRepositoryPath = Option.OutputPath + Delimiter + "IServices";
-        //    if (!Directory.Exists(iRepositoryPath))
-        //    {
-        //        Directory.CreateDirectory(iRepositoryPath);
-        //    }
-        //    var fullPath = iRepositoryPath + Delimiter + "I" + modelTypeName + "Service.cs";
-        //    if (File.Exists(fullPath) && !ifExistCovered)
-        //        return;
-        //    var content = ReadTemplate("IService.txt");
-        //    content = content.Replace("{ModelsNamespace}", Option.ModelsNamespace)
-        //        .Replace("{IRepositoriesNamespace}", Option.IRepositoryNamespace)
-        //        .Replace("{IServicesNamespace}", Option.IServicesNamespace)
-        //        .Replace("{ModelTypeName}", modelTypeName)
-        //        .Replace("{KeyTypeName}", "");
-        //    WriteAndSave(fullPath, content);
-        //}
+        /// <summary>
+        /// 生成IRepository层代码文件
+        /// </summary>
+        /// <param name="modelTypeName"></param>
+        /// <param name="keyTypeName"></param>
+        /// <param name="ifExistCovered"></param>
+        public void GenerateIService(string modelTypeName, bool ifExistCovered = false)
+        {
+            var iRepositoryPath = Option.ServiceOutputPath + Delimiter + "Services";
+            if (!Directory.Exists(iRepositoryPath))
+            {
+                Directory.CreateDirectory(iRepositoryPath);
+            }
+            var fullPath = iRepositoryPath + Delimiter + "I" + modelTypeName + "Service.cs";
+            if (File.Exists(fullPath) && !ifExistCovered)
+                return;
+            var content = ReadTemplate("IService.txt");
+            content = content.Replace("{ModelsNamespace}", Option.ModelsNamespace)
+                .Replace("{IRepositoryNamespace}", Option.IRepositoryNamespace)
+                .Replace("{IServicesNamespace}", Option.IServicesNamespace)
+                .Replace("{ModelName}", modelTypeName)
+                .Replace("{KeyTypeName}", "");
+            WriteAndSave(fullPath, content);
+        }
 
-        ///// <summary>
-        ///// 生成Repository层代码文件
-        ///// </summary>
-        ///// <param name="modelTypeName"></param>
-        ///// <param name="keyTypeName"></param>
-        ///// <param name="ifExistCovered"></param>
-        //public void GenerateService(string modelTypeName, bool ifExistCovered = false)
-        //{
-        //    var repositoryPath = Option.OutputPath + Delimiter + "Services";
-        //    if (!Directory.Exists(repositoryPath))
-        //    {
-        //        Directory.CreateDirectory(repositoryPath);
-        //    }
-        //    var fullPath = repositoryPath + Delimiter + modelTypeName + "Service.cs";
-        //    if (File.Exists(fullPath) && !ifExistCovered)
-        //        return;
-        //    var content = ReadTemplate("Service.txt");
-        //    content = content.Replace("{ModelsNamespace}", Option.ModelsNamespace)
-        //        .Replace("{IRepositoriesNamespace}", Option.IRepositoryNamespace)
-        //        .Replace("{IServicesNamespace}", Option.IServicesNamespace)
-        //        .Replace("{ServicesNamespace}", Option.ServicesNamespace)
-        //        .Replace("{ModelTypeName}", modelTypeName)
-        //        .Replace("{KeyTypeName}", "");
-        //    WriteAndSave(fullPath, content);
-        //}
+        /// <summary>
+        /// 生成service层代码文件
+        /// </summary>
+        /// <param name="modelTypeName"></param>
+        /// <param name="keyTypeName"></param>
+        /// <param name="ifExistCovered"></param>
+        public void GenerateService(string modelTypeName, bool ifExistCovered = false)
+        {
+            var repositoryPath = Option.ServiceOutputPath + Delimiter + @"Services\Impl";
+            if (!Directory.Exists(repositoryPath))
+            {
+                Directory.CreateDirectory(repositoryPath);
+            }
+            var fullPath = repositoryPath + Delimiter + modelTypeName + "Service.cs";
+            if (File.Exists(fullPath) && !ifExistCovered)
+                return;
+            var content = ReadTemplate("Service.txt");
+            content = content.Replace("{ModelsNamespace}", Option.ModelsNamespace)
+                .Replace("{IRepositoryNamespace}", Option.IRepositoryNamespace)
+                .Replace("{IServicesNamespace}", Option.IServicesNamespace)
+                .Replace("{ServicesNamespace}", Option.ServicesNamespace)
+                .Replace("{ModelName}", modelTypeName)
+                .Replace("{KeyTypeName}", "");
+            WriteAndSave(fullPath, content);
+        }
 
         /// <summary>
         /// 根据数据表生成Model层、Controller层、IRepository层和Repository层代码
@@ -191,6 +199,16 @@ namespace NetCore.Dal
                 var tables = dbConnection.GetCurrentDatabaseTableList(dbType);
                 foreach (var table in tables)
                 {
+                    table.DbTableName = table.TableName;
+                    if (Option.CamelCase=="yes")
+                    {
+                        //驼峰命名  首字母大写
+                        table.TableName =
+                            table.TableName.Substring(0, 1).ToUpper() 
+                            + table.TableName.Substring(1, table.TableName.Length - 1);
+                    }
+                    
+
                     if (!string.IsNullOrWhiteSpace(Option.Tables))
                     {
                         var mytables = Option.Tables.Split(',').ToList();
@@ -211,10 +229,10 @@ namespace NetCore.Dal
                     GenerateRepository(table.TableName, ifExistCovered);
 
                     //生成service
-                    //GenerateIService(table.TableName, ifExistCovered);
+                    GenerateIService(table.TableName, false);
 
                     //生成service
-                    //GenerateService(table.TableName, ifExistCovered);
+                    GenerateService(table.TableName, false);
                 }
             }
 
@@ -233,13 +251,17 @@ namespace NetCore.Dal
             {
                 Option.RepositoryOutputPath = arr[0];
             }
+            if (!string.IsNullOrWhiteSpace(Option.ServiceOutputPath))
+            {
+                Option.ServiceOutputPath = arr[0];
+            }
         }
 
         public void GenerateEntity(DbTable table, bool ifExistCovered = false)
         {
             //F:\\Demo\\netcore\\WebApplication4\\bin\\Debug\\netcoreapp3.1\\
 
-            var modelPath = Option.ModelOutputPath + Delimiter + "Models";
+            var modelPath = Option.ModelOutputPath + Delimiter + @"Models\DbModels";
             if (!Directory.Exists(modelPath))
             {
                 Directory.CreateDirectory(modelPath);
@@ -257,17 +279,18 @@ namespace NetCore.Dal
             foreach (var column in table.Columns)
             {
                 var tmp = GenerateEntityProperty(column);
-                sb.AppendLine(tmp);
+                sb.AppendLine(@"" + tmp);
                 sb.AppendLine();
             }
             var content = ReadTemplate("Model.txt");
             content = content.Replace("{ModelsNamespace}", Option.ModelsNamespace)
-                .Replace("{Comment}", table.TableComment)
+                .Replace("{Comment}",string.IsNullOrWhiteSpace( table.TableComment)? tableName : table.TableComment)
                 .Replace("{TableName}", tableName)
                 .Replace("{ModelName}", className)
                 .Replace("{GeneratorTime}",Option.GeneratorTime)
                 .Replace("{Author}",Option.Author)
                 .Replace("{KeyTypeName}", pkTypeName)
+                .Replace("{DbTableName}", table.DbTableName)
                 .Replace("{ModelProperties}", sb.ToString());
             WriteAndSave(fullPath, content);
         }
@@ -277,38 +300,38 @@ namespace NetCore.Dal
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(column.Comment))
             {
-                sb.AppendLine("\t\t/// <summary>");
-                sb.AppendLine("\t\t/// " + column.Comment);
-                sb.AppendLine("\t\t/// </summary>");
+                sb.AppendLine("///<summary>");
+                sb.AppendLine("///" + column.Comment);
+                sb.AppendLine("///</summary>");
             }
             if (column.IsPrimaryKey)
             {
-                sb.AppendLine("\t\t[Key]");
-                sb.AppendLine($"\t\t[Column(\"{column.ColName}\")]");
+                sb.AppendLine("[Key]");
+                sb.AppendLine($"[Column(\"{column.ColName}\")]");
                 if (column.IsIdentity)
                 {
-                    sb.AppendLine("\t\t[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
+                    sb.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
                 }
-                sb.AppendLine($"\t\tpublic {column.CSharpType} Id " + "{get;set;}");
+                sb.AppendLine($"public {column.CSharpType} Id " + "{get;set;}");
             }
             else
             {
 
-                sb.AppendLine($"\t\t[Column(\"{column.ColName}\")]");
+                sb.AppendLine($"[Column(\"{column.ColName}\")]");
 
                 if (!column.IsNullable)
                 {
-                    sb.AppendLine("\t\t[Required]");
+                    sb.AppendLine("[Required]");
                 }
 
                 var colType = column.CSharpType;
                 if (colType.ToLower() == "string" && column.ColumnLength.HasValue && column.ColumnLength.Value > 0)
                 {
-                    sb.AppendLine($"\t\t[MaxLength({column.ColumnLength.Value})]");
+                    sb.AppendLine($"[MaxLength({column.ColumnLength.Value})]");
                 }
                 if (column.IsIdentity)
                 {
-                    sb.AppendLine("\t\t[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
+                    sb.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
                 }
 
                 if (colType.ToLower() != "string" && colType.ToLower() != "byte[]" && colType.ToLower() != "object" &&
@@ -317,7 +340,7 @@ namespace NetCore.Dal
                     colType = colType + "?";
                 }
                 var colName = column.ColName;
-                sb.AppendLine($"\t\tpublic {colType} {colName} " + "{get;set;}");
+                sb.AppendLine($"public {colType} {colName} " + "{get;set;}");
             }
 
             return sb.ToString();

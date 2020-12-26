@@ -2,10 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>NetCore.Dal</RootNamespace>
-    <Version>1.0.3</Version>
+    <RootNamespace>YDal</RootNamespace>
+    <Version>1.0.5</Version>
     <PackageId>Y.Dal</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="EntityFramework\Class1.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
@@ -18,8 +22,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.9" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <!--<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />-->
+    <!--<PackageReference Include="System.Data.SqlClient" Version="4.8.2">
+    </PackageReference>-->
     <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="3.0.101" />
   </ItemGroup>
 

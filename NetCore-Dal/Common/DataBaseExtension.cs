@@ -1,14 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using YDal.Common;
+using System.Linq;
+using System.Collections;
 
-namespace YDal.Component
+namespace YDal.Common
 {
     /// <summary>
     /// 扩展System.Data.Entity.Database
@@ -35,10 +39,10 @@ namespace YDal.Component
 
         }
 
-        public static void SqlQuery(this DatabaseFacade database, string sql, CommandType commandType, params object[] parameters)
+        public static int SqlQuery(this DatabaseFacade db, string sql, CommandType commandType, params object[] parameters)
         {
 
-            using (var conn = database.GetDbConnection())
+            using (var conn = db.GetDbConnection())
             {
                 using (var cmd = conn.CreateCommand())
                 {
@@ -49,11 +53,12 @@ namespace YDal.Component
                     conn.Open();
                     cmd.CommandText = sql;
                     cmd.CommandType = commandType;
-                    cmd.ExecuteNonQuery();
+                    return cmd.ExecuteNonQuery();
                 }
             }
-
         }
+
+
 
         public static IEnumerable<TElement> SqlQueryProWithNoLock<TElement>(this DatabaseFacade database, string sql, params object[] parameters)
         {
@@ -116,7 +121,7 @@ namespace YDal.Component
             return new Tuple<IList<T1>, IList<T2>>(t1, t2);
         }
 
-        static DataSet ExecuteQuery(this DatabaseFacade database, string command, CommandType type = CommandType.Text, IEnumerable<object> parameters = null)
+        public static DataSet ExecuteQuery(this DatabaseFacade database, string command, CommandType type = CommandType.Text, IEnumerable<object> parameters = null)
         {
 
             using (var conn = database.GetDbConnection())
@@ -142,7 +147,6 @@ namespace YDal.Component
                     return ds;
                 }
             }
-
         }
 
         static T ToModel<T>(this DataRow row, Action<T, DataRow> setter = null)
@@ -196,5 +200,144 @@ namespace YDal.Component
                 yield return row.ToModel(setter);
             }
         }
+
+
+        #region connection对象
+        public static int SqlQuery(this IDbConnection dbConnection, string sql, params object[] parameters)
+        {
+            return SqlQuery(dbConnection, sql,CommandType.Text, parameters);
+        }
+
+        public static int SqlQuery(this IDbConnection dbConnection, string sql, CommandType commandType, params object[] parameters)
+        {
+
+            using (var conn = dbConnection)
+            {
+                using (var cmd = conn.CreateCommand())
+                {
+                    foreach (var parameter in parameters)
+                    {
+                        cmd.Parameters.Add(parameter);
+                    }
+                    conn.Open();
+                    cmd.CommandText = sql;
+                    cmd.CommandType = commandType;
+                    return cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 查询->对象返回
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="database"></param>
+        /// <param name="commandText"></param>
+        /// <param name="type"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Query<T>(this IDbConnection database, string commandText, CommandType type = CommandType.Text, IEnumerable<object> parameters = null)
+        {
+            return QueryDataSet(database, commandText, type, parameters).Tables[0].ToModels<T>();
+        }
+
+        /// <summary>
+        /// 查询 datatable返回
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="commandText"></param>
+        /// <param name="type"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static DataTable QueryTable(this IDbConnection database, string commandText, CommandType type = CommandType.Text, IEnumerable<object> parameters = null)
+        {
+            return QueryDataSet(database, commandText, type, parameters).Tables[0];
+        }
+
+        ///// <summary>
+        ///// 查询 datatable返回
+        ///// </summary>
+        ///// <param name="database"></param>
+        ///// <param name="commandText"></param>
+        ///// <param name="type"></param>
+        ///// <param name="parameters"></param>
+        ///// <returns></returns>
+        //public static IEnumerable<dynamic> QueryDynamic(this IDbConnection database, string commandText, CommandType type = CommandType.Text, IEnumerable<object> parameters = null)
+        //{
+        //    return QueryDataSet(database, commandText, type, parameters).Tables[0].AsDynamicEnumerable();
+        //}
+
+        /// <summary>
+        /// 查询 dataset返回
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="commandText"></param>
+        /// <param name="type"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static DataSet QueryDataSet(this IDbConnection database, string commandText, CommandType type = CommandType.Text, IEnumerable<object> parameters = null,int? page=null,int? pageSize=null)
+        {
+            using (var conn = database)
+            {
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = commandText;
+                    cmd.CommandType = type;
+                    if (parameters != null)
+                    {
+                        foreach (var parameter in parameters)
+                        {
+                            cmd.Parameters.Add(parameter);
+                        }
+                    }
+
+                    var ds = new DataSet();
+                    using (var adapter = new SqlDataAdapter((SqlCommand)cmd))
+                    {
+                        adapter.Fill(ds);
+                    }
+
+                    return ds;
+                }
+            }
+        }
+        #endregion
+
+        private static string BuildPageSql(this IDbConnection database,string sql) 
+        {
+         /*
+          * select * from (
+    　　　    　select *, ROW_NUMBER() OVER(Order by ArtistId ) AS RowId from ArtistModels
+    　　    ) as b
+          where RowId between 10 and 20
+         */
+
+            return "";
+        }
+    }
+
+    public  static class DataTableExtension
+    {
+        //public static IEnumerable<dynamic> AsDynamicEnumerable(this DataTable table)
+        //{
+        //    // Validate argument here..
+        //    return table.AsEnumerable().Select(row => new DynamicRow(row));
+        //}
+
+        //private sealed class DynamicRow : DynamicObject
+        //{
+        //    private readonly DataRow _row;
+
+        //    internal DynamicRow(DataRow row) { _row = row; }
+
+        //    // Interprets a member-access as an indexer-access on the 
+        //    // contained DataRow.
+        //    public override bool TryGetMember(GetMemberBinder binder, out object result)
+        //    {
+        //        var retVal = _row.Table.Columns.Contains(binder.Name);
+        //        result = retVal ? _row[binder.Name] : null;
+        //        return retVal;
+        //    }
+        //}
     }
 }

@@ -33,6 +33,11 @@ namespace NetCore.Dal.Models
         public string RepositoryOutputPath { get; set; }
 
         /// <summary>
+        /// service输出路径
+        /// </summary>
+        public string ServiceOutputPath { get; set; }
+
+        /// <summary>
         /// 实体命名空间
         /// </summary>
         public string ModelsNamespace { get; set; }
@@ -57,5 +62,10 @@ namespace NetCore.Dal.Models
         /// 生成表名集合，为空全部
         /// </summary>
         public string Tables { get; set; }
+
+        /// <summary>
+        /// 是否开启驼峰命名 yes/no
+        /// </summary>
+        public string CamelCase { get; set; }
     }
 }

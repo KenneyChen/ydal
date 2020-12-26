@@ -13,7 +13,12 @@ namespace NetCore.Dal.Models
     public class DbTable
     {
         /// <summary>
-        /// 表名
+        /// 数据库表名
+        /// </summary>
+        public string DbTableName { get; set; }
+
+        /// <summary>
+        /// 表名 驼峰命名
         /// </summary>
         public string TableName { get; set; }
 

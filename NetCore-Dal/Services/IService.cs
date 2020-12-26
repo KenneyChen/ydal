@@ -4,22 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace YDal.Repository
+namespace NetCore.Dal.Services
 {
-    public interface IRepository { }
-
-    public interface IRepository<TEntity>: IRepository
+    public interface IService<TEntity>
     {
-        #region 属性
-
-        /// <summary>
-        ///     获取 当前实体的查询数据集
-        /// </summary>
-        IQueryable<TEntity> Entities { get; }
-
-        IQueryable<TEntity> Table { get; }
-
-        #endregion
 
         #region 公共方法
 
@@ -80,7 +68,7 @@ namespace YDal.Repository
         /// <returns></returns>
         int Commit(bool validateOnSaveEnabled = true);
 
-    
+
         /// <summary>
         /// 查找指定主键的实体记录(从缓存中获取)
         /// </summary>
@@ -117,7 +105,7 @@ namespace YDal.Repository
         /// <returns>操作影响的行数</returns>
         int Update(Expression<Func<TEntity, bool>> funWhere, Expression<Func<TEntity, TEntity>> funUpdate);
 
-   
+
         /// <summary>
         /// 执行非查询sql语句
         /// </summary>
@@ -128,8 +116,6 @@ namespace YDal.Repository
         /// <param name="parameters">参数列表</param>
         /// <returns>返回影响的行数</returns>
         List<T> ExcuteQuery<T>(string sql, params object[] parameters);
-
-
 
         /// <summary>
         /// 指定使用索引

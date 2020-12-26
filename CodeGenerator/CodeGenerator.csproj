@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.json" />
     <None Remove="CodeTemplate\IRepository.txt" />
     <None Remove="CodeTemplate\IService.txt" />
     <None Remove="CodeTemplate\Model.txt" />
@@ -17,11 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <EmbeddedResource Include="CodeTemplate\IRepository.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>

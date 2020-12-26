@@ -35,8 +35,6 @@
 using {ModelsNamespace};
 using {IRepositoriesNamespace};
 using System;
-using System.Threading.Tasks;
-using YDal.Repository;
 using YDal.Repository.Impl;
 using YDal.UnitOfWork;
 
@@ -47,11 +45,11 @@ namespace {RepositoriesNamespace}
         /// <summary>
         ///  获取 仓储上下文的实例
         /// </summary>
-        private IUnitOfWork unitOfWork;
+        private IUnitOfWork _unitOfWork;
 
         public {ModelTypeName}Repository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
         }
     }
 }

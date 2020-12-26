@@ -17,4 +17,8 @@
     <ProjectReference Include="..\NetCore-Dal\NetCore.Dal.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="mysql\" />
+  </ItemGroup>
+
 </Project>

@@ -7,7 +7,7 @@ namespace YDal.Models
     /// <summary>
     /// db基类
     /// </summary>
-    public class BaseEntity
+    public partial class BaseEntity
     {
     }
 }

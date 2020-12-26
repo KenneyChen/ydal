@@ -7,7 +7,7 @@ namespace YDal.Common
     /// <summary>
     ///     公共辅助操作类
     /// </summary>
-    public static class PublicHelper
+    internal static class PublicHelper
     {
         #region 公共方法
 

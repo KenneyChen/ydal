@@ -30,9 +30,41 @@ namespace YDal.Common
                 || type == typeof(Single);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T CastTo<T>(this object value)
+        {
+            object result;
+            Type type = typeof(T);
+            try
+            {
+                if (type.IsEnum)
+                {
+                    result = Enum.Parse(type, value.ToString());
+                }
+                else if (type == typeof(Guid))
+                {
+                    result = Guid.Parse(value.ToString());
+                }
+                else
+                {
+                    result = Convert.ChangeType(value, type);
+                }
+            }
+            catch
+            {
+                result = default(T);
+            }
+
+            return (T)result;
+        }
 
         /// <summary>
-        ///     把对象类型转化为指定类型，转化失败时返回指定的默认值
+        /// 把对象类型转化为指定类型，转化失败时返回指定的默认值
         /// </summary>
         /// <typeparam name="T"> 动态类型 </typeparam>
         /// <param name="value"> 要转化的源对象 </param>

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CodeGenerator\CodeGenerator.csproj" />
     <ProjectReference Include="..\NetCore-Dal\NetCore.Dal.csproj" />
   </ItemGroup>
 

@@ -1,21 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Repository;
-using Microsoft.EntityFrameworkCore;
-using Repository.Impl;
-using NetCore.Dal.UnitOfWork.Impl;
-using NetCore.Dal.EntityFramework;
+using YDal.EntityFramework;
 
 namespace Samples
 {
@@ -33,7 +21,7 @@ namespace Samples
         {
             services.AddControllers();
 
-            services.AddDal();
+            services.AddDal().AddDalCodeGenerator();
             ////×¢²á·þÎñ
             //services.AddDbContext<DalDbContext>(
             //        options =>

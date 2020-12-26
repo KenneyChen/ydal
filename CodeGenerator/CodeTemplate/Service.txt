@@ -1,26 +1,4 @@
-﻿/*
-                           _ooOoo_
-                          o8888888o
-                          88" . "88
-                          (| -_- |)
-                          O\  =  /O
-                       ____/`---'\____
-                     .'  \\|     |//  `.
-                    /  \\|||  :  |||//  \
-                   /  _||||| -:- |||||-  \
-                   |   | \\\  -  /// |   |
-                   | \_|  ''\---/''  |   |
-                   \  .-\__  `-`  ___/-. /
-                 ___`. .'  /--.--\  `. . __
-              ."" '<  `.___\_<|>_/___.'  >'"".
-             | | :  `- \`.;`\ _ /`;.`/ - ` : | |
-             \  \ `-.   \_ __\ /__ _/   .-` /  /
-        ======`-.____`-.___\_____/___.-`____.-'======
-                           `=---='
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                 佛祖保佑       永无BUG
-*/
-/**
+﻿/**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：{Comment}                                                    
 *│　作    者：{Author}                                            
@@ -32,21 +10,24 @@
 *│　类    名： {ModelName}Service                                    
 *└──────────────────────────────────────────────────────────────┘
 */
-using Czar.Cms.IRepository;
-using Czar.Cms.IServices;
+using NetCore.Dal.Services.Impl;
+using {ModelsNamespace};
+using {IRepositoryNamespace};
+using {IServicesNamespace};
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using NetCore.Dal.Services;
 
 namespace {ServicesNamespace}
 {
-    public class {ModelName}Service: I{ModelName}Service
+    public class {ModelName}Service: BaseService<I{ModelName}Repository, {ModelName}>,
+        I{ModelName}Service
     {
         private readonly I{ModelName}Repository _repository;
 
-        public {ModelName}Service(I{ModelName}Repository repository)
+        public {ModelName}Service(I{ModelName}Repository repository) : base(repository)
         {
-            _repository = repository;
+            this._repository = repository;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace YDal.Common
 {
-    public static class ObjectExtensions
+    internal static class ObjectExtensions
     {
         public static object As(this object value, Type targetType, bool throwIfError = false)
         {
