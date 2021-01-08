@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetCore.Dal.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,7 +9,7 @@ namespace YDal.Repository
 {
     public interface IRepository { }
 
-    public interface IRepository<TEntity>: IRepository
+    public interface IRepository<TEntity> : IRepository
     {
         #region 属性
 
@@ -80,7 +81,7 @@ namespace YDal.Repository
         /// <returns></returns>
         int Commit(bool validateOnSaveEnabled = true);
 
-    
+
         /// <summary>
         /// 查找指定主键的实体记录(从缓存中获取)
         /// </summary>
@@ -117,7 +118,31 @@ namespace YDal.Repository
         /// <returns>操作影响的行数</returns>
         int Update(Expression<Func<TEntity, bool>> funWhere, Expression<Func<TEntity, TEntity>> funUpdate);
 
-   
+
+        /// <summary>
+        /// 单表默认分页功能
+        /// </summary>
+        /// <param name="pageInfo"></param>
+        /// <returns></returns>
+        Page<TEntity> GetListByPage(PagingInfo pageInfo);
+
+        /// <summary>
+        /// 多表分页查询
+        /// </summary>
+        /// <param name="query">IQueryable对象</param>
+        /// <returns></returns>
+        Page<T> GetListByPage<T>(PagingInfo pageInfo, IQueryable<T> query);
+
+        /// <summary>
+        /// 单表多个条件分页查询
+        /// </summary>
+        /// <param name="filter">where条件</param>
+        /// <param name="orderBy">分页信息，会返回查询后的总条数（字段RecCount）</param>
+        /// <param name="pageInfo">分页信息，字段RecCount返回总条数，可以不分页，NeedPage=false即可不分页</param>
+        /// <param name="includeProperties">include的关联实体s，多个用逗号隔开</param>
+        /// <returns></returns>
+        Page<TEntity> GetListByPage(PagingInfo pageInfo, Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, string includeProperties = "");
+
         /// <summary>
         /// 执行非查询sql语句
         /// </summary>

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.0.4</Version>
-    <PackageId>Y.Dal.CodeGenerator</PackageId>
+    <Version>1.1.0</Version>
+    <PackageId>YDal.CodeGenerator</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

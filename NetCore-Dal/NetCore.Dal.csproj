@@ -3,13 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>YDal</RootNamespace>
-    <Version>1.0.5</Version>
-    <PackageId>Y.Dal</PackageId>
+    <Version>1.1.0</Version>
+    <PackageId>YDal</PackageId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="EntityFramework\Class1.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />

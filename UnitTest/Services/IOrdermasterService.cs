@@ -1,4 +1,4 @@
-﻿/**
+/**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：{Comment}                                                    
 *│　作    者：{Author}                                              
@@ -6,19 +6,19 @@
 *│　创建时间：{GeneratorTime}                           
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间： {IServicesNamespace}                                   
-*│　接口名称： I{ModelName}Repository                                      
+*│　命名空间： NSql2Table.Services                                   
+*│　接口名称： IOrdermasterRepository                                      
 *└──────────────────────────────────────────────────────────────┘
 */
 using System;
 using System.Collections.Generic;
 using System.Text;
 using NetCore.Dal.Services;
-using {ModelsNamespace};
+using NSql2Table.Models;
 
-namespace {IServicesNamespace}
+namespace NSql2Table.Services
 {
-    public interface I{ModelName}Service:IService<{ModelName}>
+    public interface IOrdermasterService:IService<Ordermaster>
     {
     }
 }

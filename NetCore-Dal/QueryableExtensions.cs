@@ -28,7 +28,11 @@ namespace YDal
                 return page;
             }
 
-            page.Records = query.ToList();
+            page.Records = query
+                .Skip((pageInfo.PageIndex-1)*pageInfo.PageSize)
+                .Take(pageInfo.PageSize)
+                .ToList();
+
             return page;
         }
     }

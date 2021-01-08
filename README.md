@@ -53,9 +53,10 @@ Install-Package Y.Dal.CodeGenerator
 {
     //连接数据库专用
     "ConnectionStrings": {
-        "DefaultConnection": "server=localhost;uid=root;pwd=123456;port=3306;database=test;sslmode=Preferred;"
+        "DefaultConnection": "server=localhost;uid=root;pwd=123456;port=3306;database=test;sslmode=Preferred;",
+        "DbType": "MySQL"  //无此配置，默认mysql
     }
-    
+    //mssql连接字符串 Data Source=192.168.1.110;Initial Catalog=test;Persist Security Info=True;User ID=test;Password=123456;MultipleActiveResultSets=True;App=EntityFramework;
     //代码生成器插件使用 
     "DbOption": {
         "ConnectionString": "server=localhost;uid=root;pwd=123456;port=3306;database=test;sslmode=Preferred;",

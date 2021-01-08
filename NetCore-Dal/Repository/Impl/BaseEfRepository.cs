@@ -267,7 +267,7 @@ namespace YDal.Repository.Impl
                 return page;
             }
             query = orderBy != null ? orderBy(query) : query;
-            if (pageInfo.NeedPage && orderBy != null)
+            if (pageInfo.NeedPage)
             {
                 var queryPage = query
                     .Skip((pageInfo.PageIndex - 1) * pageInfo.PageSize)
