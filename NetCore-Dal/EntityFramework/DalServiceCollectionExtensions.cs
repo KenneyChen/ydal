@@ -34,7 +34,7 @@ namespace YDal.EntityFramework
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             var builder = new ConfigurationBuilder();
             var config = builder.SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 

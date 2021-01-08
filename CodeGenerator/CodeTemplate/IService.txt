@@ -14,10 +14,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NetCore.Dal.Services;
+using {ModelsNamespace};
 
 namespace {IServicesNamespace}
 {
-    public interface I{ModelName}Service:IService
+    public interface I{ModelName}Service:IService<{ModelName}>
     {
     }
 }
