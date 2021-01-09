@@ -16,44 +16,21 @@ namespace NetCore.Dal.Services.Impl
     /// </summary>
     /// <typeparam name="TRepository"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
-    public class BaseService<TRepository, TEntity>
-        where TRepository : class, IRepository<TEntity>
-        where TEntity : class
+    public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
     {
+
+        private readonly IUnitOfWork unitOfWork;
         /// <summary>
         /// 直接注入类对象，获取数据库基本操作
         /// </summary>
-        private readonly TRepository repository;
+        private readonly IRepository<TEntity> repository;
 
-        public BaseService(
-           TRepository TRepository
-           )
+        public BaseService(IRepository<TEntity> _repository, IUnitOfWork _unitOfWork)
         {
-            this.repository = TRepository;
+            this.repository = _repository;
+            this.unitOfWork = _unitOfWork;
         }
 
-        /// <summary>
-        /// 获取操作对象
-        /// </summary>
-        public BaseEfRepository<TEntity> RepositoryImpl
-        {
-            get
-            {
-                if (repository is BaseEfRepository<TEntity>)
-                {
-                    return repository as BaseEfRepository<TEntity>;
-                }
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// 获取工作单元对象，批量提交使用
-        /// </summary>
-        public IUnitOfWork UnitOfWork
-        {
-            get { return RepositoryImpl != null ? RepositoryImpl.unitOfWork : null; }
-        }
 
 
         #region 公共方法
@@ -66,7 +43,8 @@ namespace NetCore.Dal.Services.Impl
         /// <returns> 操作影响的行数 </returns>
         public int Insert(TEntity entity, bool isSave = true)
         {
-            return this.repository.Insert(entity, isSave);
+            this.repository.Insert(entity);
+            return isSave ? 0 : unitOfWork.Commit();
         }
 
         /// <summary>
@@ -77,7 +55,8 @@ namespace NetCore.Dal.Services.Impl
         /// <returns> 操作影响的行数 </returns>
         public int Insert(IEnumerable<TEntity> entities, bool isSave = true)
         {
-            return this.repository.Insert(entities, isSave);
+            this.repository.Insert(entities);
+            return isSave ? 0 : unitOfWork.Commit();
         }
 
 
@@ -89,7 +68,8 @@ namespace NetCore.Dal.Services.Impl
         /// <returns> 操作影响的行数 </returns>
         public int Delete(TEntity entity, bool isSave = true)
         {
-            return this.repository.Delete(entity, isSave);
+            this.repository.Delete(entity);
+            return isSave ? 0 : unitOfWork.Commit();
         }
 
         /// <summary>
@@ -100,7 +80,8 @@ namespace NetCore.Dal.Services.Impl
         /// <returns> 操作影响的行数 </returns>
         public int Delete(IEnumerable<TEntity> entities, bool isSave = true)
         {
-            return this.repository.Delete(entities, isSave);
+            this.repository.Delete(entities);
+            return isSave ? 0 : unitOfWork.Commit();
         }
 
         /// <summary>
@@ -111,7 +92,9 @@ namespace NetCore.Dal.Services.Impl
         /// <returns> 操作影响的行数 </returns>
         public int Delete(Expression<Func<TEntity, bool>> predicate, bool isSave = true)
         {
-            return this.repository.Delete(predicate, isSave);
+            this.repository.Delete(predicate);
+
+            return isSave ? 0 : unitOfWork.Commit();
         }
 
         /// <summary>
@@ -122,21 +105,24 @@ namespace NetCore.Dal.Services.Impl
         /// <returns> 操作影响的行数 </returns>
         public int Update(TEntity entity, bool isSave = true)
         {
-            return this.repository.Update(entity, isSave);
+            this.repository.Update(entity);
+            return isSave ? 0 : unitOfWork.Commit();
         }
 
         public int Update(IEnumerable<TEntity> entities, bool isSave = true)
         {
-            return this.repository.Update(entities, isSave);
+            this.repository.Update(entities);
+
+            return isSave ? 0 : unitOfWork.Commit();
         }
 
         /// <summary>
         /// 提交更新
         /// </summary>
         /// <returns></returns>
-        public int Commit(bool validateOnSaveEnabled = true) 
+        public int Commit(bool validateOnSaveEnabled = true)
         {
-            return this.repository.Commit(validateOnSaveEnabled);
+            return this.unitOfWork.Commit(validateOnSaveEnabled);
         }
 
 
@@ -157,7 +143,7 @@ namespace NetCore.Dal.Services.Impl
         /// <returns></returns>
         public TEntity Filter(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
         {
-            return this.repository.Filter(filter, orderBy,includeProperties);
+            return this.repository.Filter(filter, orderBy, includeProperties);
         }
 
         /// <summary>
@@ -177,7 +163,8 @@ namespace NetCore.Dal.Services.Impl
         /// <returns> 操作影响的行数 </returns>
         public int Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            return this.repository.Delete(predicate);
+            this.repository.Delete(predicate);
+            return unitOfWork.Commit();
         }
 
         /// <summary>

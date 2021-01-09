@@ -107,7 +107,7 @@ namespace YDal.EntityFramework
                             .GetInterfaces()
                             .FirstOrDefault(f => f.IsGenericType == false 
                             && f.GetInterfaces().Length==1 
-                            && f.GetInterfaces().All(a=>a.Name==typeof(IService<>).Name && a.Namespace== "NetCore.Dal.Services") 
+                            && f.GetInterfaces().All(a=>a.Name==typeof(IBaseService<>).Name && a.Namespace== "NetCore.Dal.Services") 
                             && f.FullName.ToLower().EndsWith("service"));
                         if (interfaceType != null)
                         {

@@ -9,6 +9,8 @@ typora-copy-images-to: static
 
 可能是东半球最好netcore ORM框架，目前暂时支持mysql、mssql，其核心设计目标是开发迅速、学习简单、轻量级、易扩展。现已开放源代码，开箱即用。
 
+It may be the best NETCORE ORM framework in the eastern hemisphere. At present, it temporarily supports MySQL and MSSQL, and its core design goal is to open
+
 ## 
 
 > 特此声明

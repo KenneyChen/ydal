@@ -1,13 +1,18 @@
-﻿using NetCore.Dal.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using NetCore.Dal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using YDal.EntityFramework;
 
 namespace YDal.Repository
 {
-    public interface IRepository { }
+    public interface IRepository
+    {
+        DalDbContext EfContext { get; }
+    }
 
     public interface IRepository<TEntity> : IRepository
     {
@@ -20,6 +25,7 @@ namespace YDal.Repository
 
         IQueryable<TEntity> Table { get; }
 
+
         #endregion
 
         #region 公共方法
@@ -30,7 +36,7 @@ namespace YDal.Repository
         /// <param name="entity"> 实体对象 </param>
         /// <param name="isSave"> 是否执行保存 </param>
         /// <returns> 操作影响的行数 </returns>
-        int Insert(TEntity entity, bool isSave = true);
+        void Insert(TEntity entity);
 
         /// <summary>
         ///     批量插入实体记录集合
@@ -38,7 +44,7 @@ namespace YDal.Repository
         /// <param name="entities"> 实体记录集合 </param>
         /// <param name="isSave"> 是否执行保存 </param>
         /// <returns> 操作影响的行数 </returns>
-        int Insert(IEnumerable<TEntity> entities, bool isSave = true);
+        void Insert(IEnumerable<TEntity> entities);
 
 
         /// <summary>
@@ -47,7 +53,7 @@ namespace YDal.Repository
         /// <param name="entity"> 实体对象 </param>
         /// <param name="isSave"> 是否执行保存 </param>
         /// <returns> 操作影响的行数 </returns>
-        int Delete(TEntity entity, bool isSave = true);
+        void Delete(TEntity entity);
 
         /// <summary>
         ///     删除实体记录集合
@@ -55,7 +61,7 @@ namespace YDal.Repository
         /// <param name="entities"> 实体记录集合 </param>
         /// <param name="isSave"> 是否执行保存 </param>
         /// <returns> 操作影响的行数 </returns>
-        int Delete(IEnumerable<TEntity> entities, bool isSave = true);
+        void Delete(IEnumerable<TEntity> entities);
 
         /// <summary>
         ///     删除所有符合特定表达式的数据
@@ -63,7 +69,15 @@ namespace YDal.Repository
         /// <param name="predicate"> 查询条件谓语表达式 </param>
         /// <param name="isSave"> 是否执行保存 </param>
         /// <returns> 操作影响的行数 </returns>
-        int Delete(Expression<Func<TEntity, bool>> predicate, bool isSave = true);
+        void Delete(Expression<Func<TEntity, bool>> predicate);
+
+        /// <summary>
+        /// 删除所有符合特定表达式的数据
+        /// </summary>
+        /// <param name="predicate"> 查询条件谓语表达式 </param>
+        /// <returns> 操作影响的行数 </returns>
+        int DeleteFunc(Expression<Func<TEntity, bool>> predicate);
+
 
         /// <summary>
         ///     更新实体记录
@@ -71,15 +85,9 @@ namespace YDal.Repository
         /// <param name="entity"> 实体对象 </param>
         /// <param name="isSave"> 是否执行保存 </param>
         /// <returns> 操作影响的行数 </returns>
-        int Update(TEntity entity, bool isSave = true);
+        void Update(TEntity entity);
 
-        int Update(IEnumerable<TEntity> entities, bool isSave = true);
-
-        /// <summary>
-        /// 提交更新
-        /// </summary>
-        /// <returns></returns>
-        int Commit(bool validateOnSaveEnabled = true);
+        void Update(IEnumerable<TEntity> entities);
 
 
         /// <summary>
@@ -103,12 +111,6 @@ namespace YDal.Repository
         /// <returns></returns>
         TEntity FilterWithTracking(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "");
 
-        /// <summary>
-        ///     删除所有符合特定表达式的数据
-        /// </summary>
-        /// <param name="predicate"> 查询条件谓语表达式 </param>
-        /// <returns> 操作影响的行数 </returns>
-        int Delete(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
         /// 修改操作

@@ -215,14 +215,17 @@ namespace YDal.Common
             {
                 using (var cmd = conn.CreateCommand())
                 {
-                    foreach (var parameter in parameters)
+                    //解决The SqlParameter is already contained by another SqlParameterCollection
+                    //如果同时执行query+count语句会报错
+                    var cloneParamters = parameters.Select(x =>((ICloneable) x).Clone()).ToArray();
+                    foreach (var parameter in cloneParamters)
                     {
                         cmd.Parameters.Add(parameter);
                     }
                     conn.Open();
                     cmd.CommandText = sql;
                     cmd.CommandType = commandType;
-                    return cmd.ExecuteNonQuery();
+                    return cmd.ExecuteScalar().CastTo<int>();
                 }
             }
         }

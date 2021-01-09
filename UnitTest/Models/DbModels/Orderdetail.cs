@@ -45,33 +45,34 @@ namespace NSql2Table.Models
     /// Orderdetail
     /// </summary>
     [Table("orderdetail")]
-    public partial class Orderdetail:BaseEntity
+    public partial class Orderdetail : BaseEntity
     {
         [Key]
-[Column("orderdetailid")]
-[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-public Int32 Id {get;set;}
+        [ScaffoldColumn(false)]
+        [Column("orderdetailid")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
 
-[Column("itemid")]
-[Required]
-public Int32 itemid {get;set;}
+        [Column("itemid")]
+        [Required]
+        public Int32 itemid { get; set; }
 
 
-[Column("itemname")]
-[Required]
-[MaxLength(255)]
-public String itemname {get;set;}
+        [Column("itemname")]
+        [Required]
+        [MaxLength(255)]
+        public String itemname { get; set; }
 
 
-[Column("totalprice")]
-[Required]
-public Decimal totalprice {get;set;}
+        [Column("totalprice")]
+        [Required]
+        public Decimal totalprice { get; set; }
 
 
-[Column("orderid")]
-[Required]
-public Int32 orderid {get;set;}
+        [Column("orderid")]
+        [Required]
+        public Int32 orderid { get; set; }
 
 
 

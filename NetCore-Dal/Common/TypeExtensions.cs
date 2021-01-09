@@ -55,7 +55,7 @@ namespace YDal.Common
                     result = Convert.ChangeType(value, type);
                 }
             }
-            catch
+            catch(Exception e)
             {
                 result = default(T);
             }

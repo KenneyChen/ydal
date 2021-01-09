@@ -32,13 +32,14 @@ namespace UnitTest
         [TestMethod]
         public void TestInsertSample()
         {
-            var r = _orderdetailRepository.Insert(new Orderdetail
+            var test = new Orderdetail
             {
                 itemid = 111115,
                 itemname = "²âÊÔinsert",
                 totalprice = 111,
                 orderid = 1,
-            });
+            };
+            var r = _orderdetailRepository.Insert(test);
 
             //Assert.IsTrue(r > 0);
 

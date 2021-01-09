@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NetCore.Dal.Services
 {
-    public interface IService<TEntity>
+    public interface IBaseService<TEntity>
     {
 
         #region 公共方法
@@ -62,11 +62,6 @@ namespace NetCore.Dal.Services
 
         int Update(IEnumerable<TEntity> entities, bool isSave = true);
 
-        /// <summary>
-        /// 提交更新
-        /// </summary>
-        /// <returns></returns>
-        int Commit(bool validateOnSaveEnabled = true);
 
 
         /// <summary>
@@ -122,6 +117,12 @@ namespace NetCore.Dal.Services
         /// </summary>
         /// <param name="indexName"></param>
         IQueryable<TEntity> UseIndex(string indexName);
+
+        /// <summary>
+        /// 提交更新
+        /// </summary>
+        /// <returns></returns>
+        int Commit(bool validateOnSaveEnabled = true);
         #endregion
     }
 }
