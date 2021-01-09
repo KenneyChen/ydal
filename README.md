@@ -2,7 +2,7 @@
 typora-copy-images-to: static
 ---
 
-# y-dal
+# ydal
 
 
 > 项目框架介绍
@@ -11,7 +11,9 @@ typora-copy-images-to: static
 
 ## 
 
+> 特此声明
 
+重复造轮子仅为netcore开源贡献自己一份力量，让用户在orm框架上多一份选择，可以免费商用并提供永久技术支持
 
 
 
@@ -20,8 +22,8 @@ typora-copy-images-to: static
 >安装dll
 
 ```
-Install-Package y.dal
-Install-Package Y.Dal.CodeGenerator 
+Install-Package ydal
+Install-Package YDal.CodeGenerator 
 ```
 
 也可以使用nuget管理客户端进行安装
@@ -60,7 +62,7 @@ Install-Package Y.Dal.CodeGenerator
     //代码生成器插件使用 
     "DbOption": {
         "ConnectionString": "server=localhost;uid=root;pwd=123456;port=3306;database=test;sslmode=Preferred;",
-        "DbType": "MySQL", //SqlServer  mysql
+        "DbType": "MySQL", //mssql  mysql
         "Author": "作者名称",
         "OutputPath": "F:\\app\\y-dal\\cs", //生成代码路径
         "ModelsNamespace": "Samples.Models", //实体命名空间
@@ -156,28 +158,189 @@ from a in xxxRepository
 
 ```c#
 ①简单使用
-fitler
+var order1 = _orderdetailRepository.Entities.Where(f => f.itemid == 123)
+              .Select(f => new
+              {
+                  f.itemid
+              })
+              .FirstOrDefault();
+
+var order1 = _orderdetailRepository.Filter(f => f.itemid == 123);
+
+排序从小到大
+var order1 = _orderdetailRepository.Filter(f => f.orderid == 1, p => p.OrderBy(f => f.Id));
+
+排序从大到小
+var order1 = _orderdetailRepository.Filter(f => f.orderid == 1, p => p.OrderByDescending(f => f.Id));
+
+多个字段排序
+var order1 = _orderdetailRepository.Filter(f => f.orderid == 1, p => p.OrderBy(f => f.Id).ThenBy(f=>f.itemid));    
+
 ②多个条件
-③多个表关联    
+var order1 = _orderdetailRepository.Filter(f => f.itemid == 123 && f.orderid == 1); 
+
+③多个表关联 
+var order1 = from a in _orderdetailRepository.Entities
+             join b in _ordermasterRepository.Entities on a.orderid equals b.Id
+             select new
+             {
+                 b.paytime,
+                 a.totalprice,
+                 a.itemid,
+             };
 ```
 
 
 
-2、select（映射）
+### 2、select（映射）
+
+```C#
+①匿名对象
+var order1 = _orderdetailRepository.Entities.Where(f => f.itemid == 123)
+             .Select(f => new
+              {
+                  f.itemid
+              })
+             .FirstOrDefault();
+
+②自定义对象
+ public class Test
+ {
+        public string itemname04 { get; set; }
+        public int itemid04 { get; set; }
+ }
+var order1 = _orderdetailRepository.Entities.Where(f => f.itemid == 123)
+             .Select(f => new test
+              {
+                  f.itemid
+              })
+             .FirstOrDefault();
+```
+
+### 3、update （更新）
+
+```C#
+①简单更新（不推荐）
+var order1 = _orderdetailRepository.FilterWithTracking(f => f.itemid == 123);
+order1.totalprice = 30.01M;
+var r= _orderdetailRepository.Update(order1);
+
+②sql语法糖更新（强烈推荐）
+ var r=_orderdetailRepository.Update(f => f.itemid == 123, f => new Orderdetail
+         {
+            totalprice = 32.01M
+         });    
+```
+
+### 4、delete （删除）
+
+```C#
+① 简单删除（不推荐）
+var order1 = _orderdetailRepository.FilterWithTracking(f => f.itemid == 9990);
+var r = _orderdetailRepository.Delete(order1);
+
+② sql语法糖更新（强烈推荐）
+var r = _orderdetailRepository.Delete(f => f.itemid == 9990);
+```
+
+### 5、insert （插入）
+
+```C#
+①、简单插入
+var r = _orderdetailRepository.Insert(new Orderdetail
+            {
+                itemid = 111115,
+                itemname = "测试insert",
+                totalprice = 111,
+                orderid = 1,
+            });
+            
+② 批量插入
+var itemId = new Random().Next(100000, 999999);
+var list = new List<Orderdetail>();
+for (int i = 0; i < 10; i++)
+{
+    list.Add(new Orderdetail
+    {
+       itemid = itemId,
+       itemname = "测试插入",
+       totalprice = 111,
+       orderid = 1,
+       });
+    };
+var r = _orderdetailRepository.Insert(list);
+```
+
+### 6、page分页 （分页）
+
+```C#
+①无条件单表分页
+var page = new PagingInfo
+{
+     PageIndex = 2, //当前页
+     PageSize = 5,//每页条数
+};
+var result = _orderdetailRepository.GetListByPage(page);
+var totalCount = result.TotalCount;//返回总页数 
+
+② 有条件单表分页
+var page = new PagingInfo
+{
+    PageIndex = 2, //当前页
+    PageSize = 5,//每页条数
+};
+var result = _orderdetailRepository.Entities.Where(f => f.Id > 10).Paging(page); 
+
+③ 支持匿名对象分页
+var page = new PagingInfo
+{
+    PageIndex = 1, //当前页
+    PageSize = 5,//每页条数
+};
+var result = _orderdetailRepository.Entities
+              .Where(f => f.Id > 10)
+              .Select(p => new
+                {
+                    p.itemid,
+                    p.itemname
+                })
+                .Paging(page);
+
+④ 支持自定义对象分页
+ var page = new PagingInfo
+ {
+                PageIndex = 1, //当前页
+                PageSize = 5,//每页条数
+ };
+var result = _orderdetailRepository.Entities
+               .Where(f => f.Id > 10)
+                .Select(p => new Test
+                {
+                    itemid04 = p.itemid,
+                    itemname04 = p.itemname
+                })
+                .Paging(page);  
+
+
+⑤多表分页
+var page = new PagingInfo
+{
+                PageIndex = 2, //当前页
+                PageSize = 5,//每页条数
+};
+var query = from a in _orderdetailRepository.Entities
+            join b in _ordermasterRepository.Entities on a.orderid equals b.Id
+            select new
+            {
+                b.paytime,
+                a.totalprice,
+                a.itemid,
+            };
+var result = query.Paging(page);    
+```
 
 
 
-3、update （更新）
+> 问题反馈
 
-
-
-4、delete （删除）
-
-
-
-5、insert （插入）
-
-
-
-6、page分页 （分页）
-
+可以直接进群反馈：916213430

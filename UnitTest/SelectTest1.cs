@@ -64,6 +64,12 @@ namespace UnitTest
         }
 
         [TestMethod]
+        public void TestFilterOrderBy1()
+        {
+            var order1 = _orderdetailRepository.Filter(f => f.orderid == 1, p => p.OrderBy(f => f.Id).ThenBy(f=>f.itemid));
+            Assert.IsTrue(order1 != null && order1.itemid == 123);
+        }
+        [TestMethod]
         public void TestFilterOrderBy()
         {
             var order1 = _orderdetailRepository.Filter(f => f.orderid == 1, p => p.OrderBy(f => f.Id));
@@ -109,6 +115,8 @@ namespace UnitTest
                 PageSize = 5,//每页条数
             };
             var result = _orderdetailRepository.GetListByPage(page);
+
+            var totalCount = result.TotalCount;//返回总页数
             var total = _orderdetailRepository.Entities.Count();
             Assert.IsTrue(result.Records.Count == 5 && result.TotalCount == total);
         }
