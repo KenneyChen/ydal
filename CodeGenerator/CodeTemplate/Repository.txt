@@ -42,14 +42,6 @@ namespace {RepositoriesNamespace}
 {
     public class {ModelTypeName}Repository: BaseEfRepository<{ModelTypeName}>,I{ModelTypeName}Repository
     {
-        /// <summary>
-        ///  获取 仓储上下文的实例
-        /// </summary>
-        private IUnitOfWork _unitOfWork;
-
-        public {ModelTypeName}Repository(IUnitOfWork unitOfWork) : base(unitOfWork)
-        {
-            this._unitOfWork = unitOfWork;
-        }
+      
     }
 }

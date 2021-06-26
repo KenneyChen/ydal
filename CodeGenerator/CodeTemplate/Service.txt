@@ -20,12 +20,14 @@ using NetCore.Dal.Services;
 
 namespace {ServicesNamespace}
 {
-    public class {ModelName}Service: BaseService<I{ModelName}Repository, {ModelName}>,
-        I{ModelName}Service
+    public class {ModelName}Service: BaseService<{ModelName}>,I{ModelName}Service
     {
+        /// <summary>
+        /// 直接注入类对象，获取数据库基本操作
+        /// </summary>
         private readonly I{ModelName}Repository _repository;
 
-        public {ModelName}Service(I{ModelName}Repository repository) : base(repository)
+        public {ModelName}Service(I{ModelName}Repository repository, IUnitOfWork unitOfWork) : base(repository,unitOfWork)
         {
             this._repository = repository;
         }

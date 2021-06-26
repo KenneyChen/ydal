@@ -3,8 +3,22 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>YDal</RootNamespace>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
     <PackageId>YDal</PackageId>
+    <Authors>KenneyChen</Authors>
+    <Company>KenneyChen</Company>
+    <Product>KenneyChen</Product>
+    <Description>
+      20210626
+      ①加入事务特性
+      ②重构工作单元
+      ================================================================
+      
+      ydal可能东半球最好netcore orm框架：https://github.com/KenneyChen/ydal
+    </Description>
+    <PackageProjectUrl>https://github.com/KenneyChen/ydal</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>可能东半球最好netcore orm框架：https://github.com/KenneyChen/ydal</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
